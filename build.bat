@@ -1,5 +1,4 @@
-cls
-set "EXE_NAME=obj_builder_win32"
+set "EXE_NAME=obj_builder"
 set "DESTINATION_DIR=..\build\objbuilder"
 
 IF NOT EXIST ..\build mkdir ..\build

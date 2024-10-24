@@ -11,7 +11,10 @@
     #include <limits.h>
 #endif
 
-#include "../GameEngine/object/Object.h"
+#include "../GameEngine/log/Debug.h"
+#include "../GameEngine/log/Debug.cpp"
+
+#include "../GameEngine/object/Mesh.h"
 #include "../GameEngine/object/Vertex.h"
 #include "../GameEngine/object/Material.h"
 #include "../GameEngine/object/Hitbox.h"
@@ -60,11 +63,14 @@ void iter_directories_recursive(RingMemory* ring, const char *dir_path) {
                     printf("Found .objtxt file: %s\n", abs_path);
 
                     meshes[mesh_index].data = (byte *) calloc(10, MEGABYTE);
-                    object_from_file_txt(ring, abs_path, meshes + mesh_index);
+
+                    FileBody file;
+                    file_read(abs_path, &file, ring);
+                    mesh_from_file_txt(meshes + mesh_index, file.content);
 
                     char new_path[MAX_PATH];
                     str_replace(abs_path, ".objtxt", ".objbin", new_path);
-                    object_to_file(ring, new_path, meshes + mesh_index, VERTEX_TYPE_POSITION, FACE_TYPE_VERTICES, 8);
+                    mesh_to_file(ring, new_path, meshes + mesh_index, VERTEX_TYPE_POSITION, FACE_TYPE_VERTICES, 8);
 
                     free(meshes[mesh_index].data);
 
@@ -138,11 +144,14 @@ void iter_directories_recursive(RingMemory* ring, const char *dir_path) {
                     meshes[mesh_index].animations = (uint32 *) malloc(sizeof(uint32) * 300);
                     meshes[mesh_index].hitboxes = (uint32 *) malloc(sizeof(uint32) * 100);
                     meshes[mesh_index].audios = (uint32 *) malloc(sizeof(uint32) * 100);
-                    object_from_file_txt(ring, abs_path, meshes + mesh_index);
+
+                    FileBody file;
+                    file_read(abs_path, &file, ring);
+                    mesh_from_file_txt(meshes + mesh_index, file.content);
 
                     char new_path[MAX_PATH];
                     str_replace(abs_path, ".objtxt", ".objbin", new_path);
-                    object_to_file(ring, new_path, meshes + mesh_index);
+                    mesh_to_file(ring, new_path, meshes + mesh_index);
 
                     free(meshes[mesh_index].vertices);
                     free(meshes[mesh_index].indices);
