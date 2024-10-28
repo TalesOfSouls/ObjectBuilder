@@ -1,5 +1,5 @@
 set "EXE_NAME=obj_builder"
-set "DESTINATION_DIR=..\build\objbuilder"
+set "DESTINATION_DIR=..\build\obj_builder"
 
 IF NOT EXIST ..\build mkdir ..\build
 IF NOT EXIST "%DESTINATION_DIR%" mkdir "%DESTINATION_DIR%"
