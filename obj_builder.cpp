@@ -66,11 +66,11 @@ void iter_directories_recursive(RingMemory* ring, const char *dir_path) {
 
                     FileBody file;
                     file_read(abs_path, &file, ring);
-                    mesh_from_file_txt(meshes + mesh_index, file.content);
+                    mesh_from_file_txt(meshes + mesh_index, file.content, ring);
 
                     char new_path[MAX_PATH];
                     str_replace(abs_path, ".objtxt", ".objbin", new_path);
-                    mesh_to_file(ring, new_path, meshes + mesh_index, VERTEX_TYPE_POSITION, FACE_TYPE_VERTICES, 8);
+                    mesh_to_file(ring, new_path, meshes + mesh_index, VERTEX_TYPE_ALL, 8);
 
                     free(meshes[mesh_index].data);
 
@@ -138,8 +138,7 @@ void iter_directories_recursive(RingMemory* ring, const char *dir_path) {
                 if (realpath(path, abs_path)) {
                     printf("Found .objtxt file: %s\n", abs_path);
 
-                    meshes[mesh_index].vertices = (Vertex3D *) calloc(100000, sizeof(Vertex3D));
-                    meshes[mesh_index].indices = (Face *) calloc(6 * 100000, sizeof(Face));
+                    meshes[mesh_index].data = (Vertex3D *) calloc(100000, sizeof(Vertex3D));
                     meshes[mesh_index].materials = (uint32 *) malloc(sizeof(uint32) * 100);
                     meshes[mesh_index].animations = (uint32 *) malloc(sizeof(uint32) * 300);
                     meshes[mesh_index].hitboxes = (uint32 *) malloc(sizeof(uint32) * 100);
@@ -151,10 +150,9 @@ void iter_directories_recursive(RingMemory* ring, const char *dir_path) {
 
                     char new_path[MAX_PATH];
                     str_replace(abs_path, ".objtxt", ".objbin", new_path);
-                    mesh_to_file(ring, new_path, meshes + mesh_index);
+                    mesh_to_file(ring, new_path, meshes + mesh_index, VERTEX_TYPE_ALL, 8);
 
                     free(meshes[mesh_index].vertices);
-                    free(meshes[mesh_index].indices);
                     free(meshes[mesh_index].materials);
                     free(meshes[mesh_index].animations);
                     free(meshes[mesh_index].hitboxes);
